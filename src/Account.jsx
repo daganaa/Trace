@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
 import { makeCall } from './makeCall'
+import { getCall } from './getCall'
+import { listCalls } from './listCalls'
 
-export default function Account({ session, onGoToEmptyPage }) {
+export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
   const [loading, setLoading] = useState(true)
   const [firstName, setFirstName] = useState(null)
   const [lastName, setLastName] = useState(null)
@@ -10,6 +12,8 @@ export default function Account({ session, onGoToEmptyPage }) {
   const [email, setEmail] = useState(null)
   const [createdAt, setCreatedAt] = useState(null)
   const [isEditing, setIsEditing] = useState(false)
+  const [calls, setCalls] = useState([])
+  const [callsLoading, setCallsLoading] = useState(false)
 
   useEffect(() => {
     let ignore = false
@@ -276,7 +280,7 @@ export default function Account({ session, onGoToEmptyPage }) {
             <p className="text-gray-600 mb-6">Access your journaling workspace and begin your reflection journey.</p>
             <div className="space-y-4">
               <button
-                onClick={onGoToEmptyPage}
+                onClick={onGoToJournal}
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
               >
                 Go to Journal
@@ -293,6 +297,27 @@ export default function Account({ session, onGoToEmptyPage }) {
                 Make Call
                 <svg className="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+              </button>
+              
+              {/* Get Call Button */}
+              <button
+                onClick={handleGetCall}
+                className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200 ml-4"
+              >
+                Get Call
+                <svg className="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                </svg>
+              </button>
+              {/* List Call Button */}
+              <button
+                onClick={handleListCalls}
+                className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 ml-4"
+              >
+                List All Calls
+                <svg className="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                 </svg>
               </button>
             </div>
@@ -315,3 +340,45 @@ const handleMakeCall = async () => {
     alert('Failed to make call. Check console for error details.');
   }
 };
+
+const handleGetCall = async () => {
+  try {
+    // You'll need to replace this with an actual call ID from a previous call
+    const callId = prompt('Enter Call ID to retrieve:');
+    if (!callId) {
+      alert('Call ID is required');
+      return;
+    }
+    
+    console.log('Retrieving call...');
+    const result = await getCall({call_id: callId});
+    console.log('Call retrieved successfully:', result);
+    alert('Call retrieved! Check console for details.');
+  } catch (error) {
+    console.error('Failed to retrieve call:', error);
+    alert('Failed to retrieve call. Check console for error details.');
+  }
+};
+
+const handleListCalls = async () => {
+  try {
+    const calls = await listCalls();
+    
+    if (calls && calls.length > 0) {
+      // Format the calls data for display
+      const callsInfo = calls.map(call => 
+        `Call ID: ${call.call_id}\nStatus: ${call.call_status || 'N/A'}\nFrom: ${call.from_number || 'N/A'}\nTo: ${call.to_number || 'N/A'}\nCreated: ${call.created_at ? new Date(call.created_at).toLocaleString() : 'N/A'}`
+      ).join('\n\n');
+      
+      alert(`All Calls (${calls.length} total):\n\n${callsInfo}`);
+      console.log('All calls:', calls);
+    } else {
+      alert('No calls found in your account.');
+    }
+  } catch (error) {
+    console.error('Failed to list calls:', error);
+    alert(`Failed to list calls: ${error.message}`);
+  }
+};
+
+// Add this section in your JSX where you want to display the calls
