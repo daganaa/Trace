@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
 import { makeCall } from './makeCall'
 import { getCall } from './getCall'
-import { listCalls } from './listCalls' // Add this import
+import { listCalls } from './listCalls'
 
-export default function Account({ session, onGoToEmptyPage }) {
+export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
   const [loading, setLoading] = useState(true)
   const [firstName, setFirstName] = useState(null)
   const [lastName, setLastName] = useState(null)
@@ -12,6 +12,8 @@ export default function Account({ session, onGoToEmptyPage }) {
   const [email, setEmail] = useState(null)
   const [createdAt, setCreatedAt] = useState(null)
   const [isEditing, setIsEditing] = useState(false)
+  const [calls, setCalls] = useState([])
+  const [callsLoading, setCallsLoading] = useState(false)
 
   useEffect(() => {
     let ignore = false
@@ -278,7 +280,7 @@ export default function Account({ session, onGoToEmptyPage }) {
             <p className="text-gray-600 mb-6">Access your journaling workspace and begin your reflection journey.</p>
             <div className="space-y-4">
               <button
-                onClick={onGoToEmptyPage}
+                onClick={onGoToJournal}
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
               >
                 Go to Journal
@@ -378,3 +380,5 @@ const handleListCalls = async () => {
     alert(`Failed to list calls: ${error.message}`);
   }
 };
+
+// Add this section in your JSX where you want to display the calls
