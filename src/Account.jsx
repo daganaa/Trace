@@ -92,10 +92,10 @@ export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
   // Show loading if session is not available yet
   if (!session?.user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading your account...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-200 border-t-blue-600 mx-auto"></div>
+          <p className="mt-6 text-gray-500 font-light">Loading your account...</p>
         </div>
       </div>
     )
@@ -103,65 +103,66 @@ export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading your account...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-200 border-t-blue-600 mx-auto"></div>
+          <p className="mt-6 text-gray-500 font-light">Loading your account...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-8">
-          <div className="px-6 py-8">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="h-16 w-16 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-2xl font-semibold text-blue-600">
-                    {firstName && lastName ? `${firstName[0]}${lastName[0]}` : session.user.email[0].toUpperCase()}
-                  </span>
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">
-                    {firstName && lastName ? `${firstName} ${lastName}` : 'Welcome'}
-                  </h1>
-                  <p className="text-gray-600">{email || session.user.email}</p>
-                </div>
+    <div className="min-h-screen bg-white">
+      {/* Header Section */}
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-5xl mx-auto px-6 py-12">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-6">
+              <div className="h-20 w-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <span className="text-2xl font-semibold text-white">
+                  {firstName && lastName ? `${firstName[0]}${lastName[0]}` : session.user.email[0].toUpperCase()}
+                </span>
               </div>
-              <button
-                onClick={handleSignOut}
-                className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-              >
-                Sign Out
-              </button>
+              <div>
+                <h1 className="text-4xl font-light text-gray-900 mb-2">
+                  {firstName && lastName ? `${firstName} ${lastName}` : 'Welcome'}
+                </h1>
+                <p className="text-lg text-gray-500 font-light">{email || session.user.email}</p>
+              </div>
             </div>
+            <button
+              onClick={handleSignOut}
+              className="px-6 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 border border-gray-200 rounded-xl hover:border-gray-300 transition-all duration-200 hover:shadow-sm"
+            >
+              Sign Out
+            </button>
           </div>
         </div>
+      </div>
 
+      <div className="max-w-5xl mx-auto px-6 py-16">
         {/* Account Information */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Account Information</h2>
-              <button
-                onClick={() => setIsEditing(!isEditing)}
-                className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              >
-                {isEditing ? 'Cancel' : 'Edit Profile'}
-              </button>
+        <div className="mb-16">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl font-light text-gray-900 mb-2">Account Information</h2>
+              <p className="text-gray-500 font-light">Manage your personal details and preferences</p>
             </div>
+            <button
+              onClick={() => setIsEditing(!isEditing)}
+              className="px-6 py-3 text-sm font-medium text-blue-600 hover:text-blue-700 border border-blue-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all duration-200"
+            >
+              {isEditing ? 'Cancel' : 'Edit Profile'}
+            </button>
           </div>
 
-          <div className="px-6 py-6">
+          <div className="bg-white border border-gray-100 rounded-2xl p-8 shadow-sm">
             {isEditing ? (
-              <form onSubmit={updateProfile} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <form onSubmit={updateProfile} className="space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
-                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-3">
                       First Name
                     </label>
                     <input
@@ -169,11 +170,11 @@ export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
                       type="text"
                       value={firstName || ''}
                       onChange={(e) => setFirstName(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     />
                   </div>
                   <div>
-                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-3">
                       Last Name
                     </label>
                     <input
@@ -181,13 +182,13 @@ export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
                       type="text"
                       value={lastName || ''}
                       onChange={(e) => setLastName(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-3">
                     Email
                   </label>
                   <input
@@ -195,12 +196,12 @@ export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
                     type="email"
                     value={email || ''}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-3">
                     Phone Number
                   </label>
                   <input
@@ -208,53 +209,53 @@ export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
                     type="tel"
                     value={phoneNumber || ''}
                     onChange={(e) => setPhoneNumber(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
                 </div>
 
-                <div className="flex justify-end space-x-3">
+                <div className="flex justify-end space-x-4 pt-6">
                   <button
                     type="button"
                     onClick={() => setIsEditing(false)}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    className="px-6 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 border border-gray-200 rounded-xl hover:border-gray-300 transition-all duration-200"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={loading}
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-3 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
                   >
                     {loading ? 'Saving...' : 'Save Changes'}
                   </button>
                 </div>
               </form>
             ) : (
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">First Name</h3>
-                    <p className="mt-1 text-lg text-gray-900">{firstName || 'Not provided'}</p>
+                    <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">First Name</h3>
+                    <p className="text-xl font-light text-gray-900">{firstName || 'Not provided'}</p>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Last Name</h3>
-                    <p className="mt-1 text-lg text-gray-900">{lastName || 'Not provided'}</p>
+                    <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Last Name</h3>
+                    <p className="text-xl font-light text-gray-900">{lastName || 'Not provided'}</p>
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Email</h3>
-                  <p className="mt-1 text-lg text-gray-900">{email || session.user.email}</p>
+                  <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Email</h3>
+                  <p className="text-xl font-light text-gray-900">{email || session.user.email}</p>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Phone Number</h3>
-                  <p className="mt-1 text-lg text-gray-900">{phoneNumber || 'Not provided'}</p>
+                  <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Phone Number</h3>
+                  <p className="text-xl font-light text-gray-900">{phoneNumber || 'Not provided'}</p>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Member Since</h3>
-                  <p className="mt-1 text-lg text-gray-900">
+                  <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Member Since</h3>
+                  <p className="text-xl font-light text-gray-900">
                     {createdAt ? new Date(createdAt).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
@@ -270,55 +271,62 @@ export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
             )}
           </div>
         </div>
-      </div>
-      
-      {/* Update the button section at the bottom */}
-      <div className="max-w-4xl mx-auto mt-8">
-        <div className="bg-white shadow rounded-lg p-6">
-          <div className="text-center">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Ready to Start Journaling?</h3>
-            <p className="text-gray-600 mb-6">Access your journaling workspace and begin your reflection journey.</p>
-            <div className="space-y-4">
+
+        {/* Actions Section */}
+        <div>
+          <div className="text-center mb-12">
+            <h3 className="text-2xl font-light text-gray-900 mb-4">Ready to Start Journaling?</h3>
+            <p className="text-lg text-gray-500 font-light max-w-2xl mx-auto">Transform conversations into insights through AI-powered voice journaling. Speak freely, reflect deeply.</p>
+          </div>
+          
+          <div className="bg-white border border-gray-100 rounded-2xl p-8 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <button
                 onClick={onGoToJournal}
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+                className="group relative overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 text-white px-6 py-4 rounded-xl font-medium transition-all duration-200 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
-                Go to Journal
-                <svg className="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
+                <div className="relative z-10 flex items-center justify-center">
+                  <span>Go to Journal</span>
+                  <svg className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </div>
               </button>
               
-              {/* Make Call Button */}
               <button
                 onClick={handleMakeCall}
-                className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 ml-4"
+                className="group px-6 py-4 border border-gray-200 rounded-xl font-medium text-gray-700 hover:text-gray-900 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
-                Make Call
-                <svg className="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
+                <div className="flex items-center justify-center">
+                  <svg className="mr-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  <span>Make Call</span>
+                </div>
               </button>
               
-              {/* Get Call Button */}
               <button
                 onClick={handleGetCall}
-                className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200 ml-4"
+                className="group px-6 py-4 border border-gray-200 rounded-xl font-medium text-gray-700 hover:text-gray-900 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
-                Get Call
-                <svg className="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                </svg>
+                <div className="flex items-center justify-center">
+                  <svg className="mr-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                  </svg>
+                  <span>Get Call</span>
+                </div>
               </button>
-              {/* List Call Button */}
+              
               <button
                 onClick={handleListCalls}
-                className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 ml-4"
+                className="group px-6 py-4 border border-gray-200 rounded-xl font-medium text-gray-700 hover:text-gray-900 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
-                List All Calls
-                <svg className="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                </svg>
+                <div className="flex items-center justify-center">
+                  <svg className="mr-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                  </svg>
+                  <span>List All Calls</span>
+                </div>
               </button>
             </div>
           </div>
@@ -327,7 +335,6 @@ export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
     </div>
   )
 }
-
 
 const handleMakeCall = async () => {
   try {
