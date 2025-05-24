@@ -42,29 +42,21 @@ export default function Journal({ onBackToAccount, onViewCall }) {
           <div className="space-y-4">
             {calls.map((call) => (
               <div key={call.call_id} className="border p-4 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center justify-between">
                   <div>
-                    <p><strong>Call ID:</strong> {call.call_id}</p>
-                    <p><strong>Start Time:</strong> {call.formatted_start_time || 'N/A'}</p>
-                    <p><strong>Successful:</strong> {call.call_successful ? 'Yes' : 'No'}</p>
+                    <p className="text-lg font-medium">{call.formatted_start_time || 'N/A'}</p>
                   </div>
                   <div>
-                    <p><strong>Summary:</strong> {call.call_summary || 'No summary available'}</p>
-                    {call.transcript && (
-                      <p><strong>Transcript:</strong> {call.transcript.substring(0, 100)}...</p>
-                    )}
+                    <button
+                      onClick={() => onViewCall(call)}
+                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      View Details
+                      <svg className="ml-2 -mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
                   </div>
-                </div>
-                <div className="mt-4 flex justify-end">
-                  <button
-                    onClick={() => onViewCall(call)}
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  >
-                    View Details
-                    <svg className="ml-2 -mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </button>
                 </div>
               </div>
             ))}
