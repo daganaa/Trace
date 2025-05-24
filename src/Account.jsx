@@ -19,7 +19,7 @@ export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
     {
       id: 1,
       date: 'Wednesday, May 22, 2024',
-      text: 'Today brought unexpected clarity about my writing process. The morning pages...',
+      text: 'Today I stubbed my toe and it lowkey ruined my day...',
       number: '04'
     },
     {
