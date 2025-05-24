@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
 import { makeCall } from './makeCall'
+import { getCall } from './getCall'
 
 export default function Account({ session, onGoToEmptyPage }) {
   const [loading, setLoading] = useState(true)
@@ -295,6 +296,17 @@ export default function Account({ session, onGoToEmptyPage }) {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
               </button>
+              
+              {/* Get Call Button */}
+              <button
+                onClick={handleGetCall}
+                className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200 ml-4"
+              >
+                Get Call
+                <svg className="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
@@ -313,5 +325,24 @@ const handleMakeCall = async () => {
   } catch (error) {
     console.error('Failed to make call:', error);
     alert('Failed to make call. Check console for error details.');
+  }
+};
+
+const handleGetCall = async () => {
+  try {
+    // You'll need to replace this with an actual call ID from a previous call
+    const callId = prompt('Enter Call ID to retrieve:');
+    if (!callId) {
+      alert('Call ID is required');
+      return;
+    }
+    
+    console.log('Retrieving call...');
+    const result = await getCall({call_id: callId});
+    console.log('Call retrieved successfully:', result);
+    alert('Call retrieved! Check console for details.');
+  } catch (error) {
+    console.error('Failed to retrieve call:', error);
+    alert('Failed to retrieve call. Check console for error details.');
   }
 };
