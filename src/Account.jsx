@@ -137,7 +137,7 @@ export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
           {/* Daily Call Time Section */}
           <div>
             <h2 className="text-xl font-medium text-gray-900 mb-6">Select Your Daily Call Time</h2>
-            <div className="bg-orange-200 rounded-xl p-6">
+            <div className="bg-blue-400 rounded-xl p-6">
               <div className="text-center">
                 <div className="text-4xl font-light text-gray-900 mb-2">{selectedTime}</div>
                 <div className="text-sm text-gray-600">Daily reflection time</div>
@@ -167,7 +167,7 @@ export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          <div className="bg-orange-100 rounded-2xl p-6">
+          <div className="bg-blue-200 rounded-2xl p-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-600 uppercase tracking-wider">Entries This Month</span>
               <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,7 +178,7 @@ export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
             <div className="text-sm text-gray-600">8 more than last month</div>
           </div>
 
-          <div className="bg-orange-100 rounded-2xl p-6">
+          <div className="bg-blue-200 rounded-2xl p-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-600 uppercase tracking-wider">Longest Streak</span>
               <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -189,7 +189,7 @@ export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
             <div className="text-sm text-gray-600">Your best run yet</div>
           </div>
 
-          <div className="bg-orange-100 rounded-2xl p-6">
+          <div className="bg-blue-200 rounded-2xl p-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-600 uppercase tracking-wider">Next Reflection</span>
               <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -215,7 +215,7 @@ export default function Account({ session, onGoToEmptyPage, onGoToJournal }) {
 
           <div className="space-y-4">
             {reflections.map((reflection) => (
-              <div key={reflection.id} className="bg-orange-100 rounded-2xl p-6 flex items-start justify-between">
+              <div key={reflection.id} className="bg-blue-200 rounded-2xl p-6 flex items-start justify-between">
                 <div className="flex-1">
                   <div className="text-sm text-gray-600 mb-2">{reflection.date}</div>
                   <p className="text-gray-900 leading-relaxed">{reflection.text}</p>
