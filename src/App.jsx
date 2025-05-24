@@ -20,7 +20,7 @@ function App() {
 
   return (
     <div>
-      <Auth />
+      {!session ? <Auth /> : <EmptyPage />}
     </div>
   )
 }

@@ -29,7 +29,7 @@ export default function Auth() {
     event.preventDefault()
     setLoading(true)
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -38,13 +38,20 @@ export default function Auth() {
           last_name: lastName,
           phone_number: phoneNumber,
         },
+        // Add this to skip email confirmation in development
+        emailRedirectTo: window.location.origin,
       },
     })
 
     if (error) {
       alert(error.error_description || error.message)
     } else {
-      alert('Check your email to confirm your account!')
+      // Check if user needs email confirmation
+      if (data.user && !data.user.email_confirmed_at) {
+        alert('Check your email to confirm your account!')
+      } else {
+        alert('Account created successfully!')
+      }
     }
     setLoading(false)
   }
