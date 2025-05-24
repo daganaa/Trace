@@ -1,10 +1,10 @@
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
 
-export async function getCall({call_id}) {
+export async function listCalls() {
   try {
-    console.log('Retrieving call via backend:', call_id);
+    console.log('Listing all calls via backend');
     
-    const response = await fetch(`${BACKEND_URL}/api/calls/${call_id}`, {
+    const response = await fetch(`${BACKEND_URL}/api/calls`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -19,13 +19,13 @@ export async function getCall({call_id}) {
     const result = await response.json();
     
     if (result.success) {
-      console.log('Call retrieved successfully:', result.data);
+      console.log('Calls listed successfully:', result.data);
       return result.data;
     } else {
-      throw new Error(result.error || 'Failed to retrieve call');
+      throw new Error(result.error || 'Failed to list calls');
     }
   } catch (error) {
-    console.error('Error getting phone call:', error);
+    console.error('Error listing calls:', error);
     throw error;
   }
 }
