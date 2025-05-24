@@ -38,7 +38,6 @@ export default function Auth({ onBackToLanding }) {
           last_name: lastName,
           phone_number: phoneNumber,
         },
-        // Add this to skip email confirmation in development
         emailRedirectTo: window.location.origin,
       },
     })
@@ -46,7 +45,6 @@ export default function Auth({ onBackToLanding }) {
     if (error) {
       alert(error.error_description || error.message)
     } else {
-      // Check if user needs email confirmation
       if (data.user && !data.user.email_confirmed_at) {
         alert('Check your email to confirm your account!')
       } else {
@@ -56,9 +54,27 @@ export default function Auth({ onBackToLanding }) {
     setLoading(false)
   }
 
+  const handleMagicLink = async (event) => {
+    event.preventDefault()
+    setLoading(true)
+
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: window.location.origin,
+      },
+    })
+
+    if (error) {
+      alert(error.error_description || error.message)
+    } else {
+      alert('Check your email for the magic link!')
+    }
+    setLoading(false)
+  }
+
   const toggleMode = () => {
     setIsSignUp(!isSignUp)
-    // Clear form when switching modes
     setEmail('')
     setPassword('')
     setFirstName('')
@@ -67,12 +83,12 @@ export default function Auth({ onBackToLanding }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
+    <div className="min-h-screen bg-white flex flex-col justify-center py-12 px-6 relative">
       {/* Back Button */}
       <div className="absolute top-4 left-4 z-10">
         <button
           onClick={onBackToLanding}
-          className="flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200"
+          className="flex items-center text-gray-400 hover:text-white transition-colors duration-200"
         >
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -83,209 +99,104 @@ export default function Auth({ onBackToLanding }) {
       
       {/* Centered Content Container */}
       <div className="flex justify-center items-center">
-        <div className="max-w-md w-full space-y-8 lg:max-w-2xl">
-          {/* Desktop Layout - Two Column */}
-          <div className="hidden lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
-            {/* Left Column - Welcome Content */}
-            <div className="space-y-6">
-              <div>
-                <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                  {isSignUp ? 'Join Trace' : 'Welcome Back'}
-                </h1>
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  {isSignUp 
-                    ? 'Start your journaling journey with AI-powered insights and voice conversations that help you reflect and grow.'
-                    : 'Continue your journaling journey. Sign in to access your conversations and insights.'
-                  }
-                </p>
-              </div>
-              <div className="space-y-4 text-gray-600">
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span>AI-powered voice conversations</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span>Automatic transcription & analysis</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span>Personal insights & growth tracking</span>
-                </div>
-              </div>
+        <div className="max-w-md w-full space-y-10">
+          {/* Logo */}
+          <div className="text-center">
+            <div className="mx-auto w-16 h-16 flex items-center justify-center mb-8">
+              <svg width="64" height="64" viewBox="0 0 513 586" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="28" y="319" width="298" height="54" rx="13" fill="black"/>
+                <path d="M67 390H286V410H67V390Z" fill="black"/>
+                <rect y="427" width="353" height="159" rx="13" fill="black"/>
+                <path d="M280.125 302H250L290.356 231.882C290.356 231.882 295.223 120.532 332.986 75.761C369.554 32.4062 513 1 513 1C513 1 471.108 81.9574 448 105.5C424.892 129.043 364.816 169.434 364.816 169.434H455.759C455.759 169.434 411.341 206.259 386.415 223.118C359.074 241.61 307.976 255.985 307.976 255.985L280.125 302Z" fill="black" stroke="black"/>
+              </svg>
             </div>
-            
-            {/* Right Column - Form */}
-            <div className="bg-white p-8 rounded-xl shadow-lg">
-              <form className="space-y-6" onSubmit={isSignUp ? handleSignUp : handleLogin}>
-                <div className="space-y-4">
-                  {isSignUp && (
-                    <>
-                      <div className="grid grid-cols-2 gap-4">
-                        <input
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                          type="text"
-                          placeholder="First Name"
-                          value={firstName}
-                          required={true}
-                          onChange={(e) => setFirstName(e.target.value)}
-                        />
-                        <input
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                          type="text"
-                          placeholder="Last Name"
-                          value={lastName}
-                          required={true}
-                          onChange={(e) => setLastName(e.target.value)}
-                        />
-                      </div>
-                      <input
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                        type="tel"
-                        placeholder="Phone Number"
-                        value={phoneNumber}
-                        required={true}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                      />
-                    </>
-                  )}
-                  
-                  <input
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                    type="email"
-                    placeholder="Your email"
-                    value={email}
-                    required={true}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  
-                  <input
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                    type="password"
-                    placeholder="Your password"
-                    value={password}
-                    required={true}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                
-                <button 
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <span>Loading...</span>
-                  ) : (
-                    <span>{isSignUp ? 'Create Account' : 'Sign In'}</span>
-                  )}
-                </button>
-                
-                <div className="text-center">
-                  <p className="text-gray-600">
-                    {isSignUp ? 'Already have an account?' : "Don't have an account?"}
-                    <button 
-                      type="button" 
-                      className="ml-2 text-blue-600 hover:text-blue-500 font-medium focus:outline-none focus:underline disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                      onClick={toggleMode}
-                      disabled={loading}
-                    >
-                      {isSignUp ? 'Sign In' : 'Sign Up'}
-                    </button>
-                  </p>
-                </div>
-              </form>
-            </div>
-          </div>
+          </div>          
+            <h1 className="text-xl lg:text-2xl font-bold font-serif text-gray-900 mb-8 text-center">
+              <span className="text-[3vw] lg:text-[3vw]">{isSignUp ? 'Join Libro' : 'Log in to Libro'}</span>
+            </h1>
 
-          {/* Mobile Layout - Single Column */}
-          <div className="lg:hidden">
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                {isSignUp ? 'Create Account' : 'Welcome Back'}
-              </h1>
-              <p className="text-gray-600">
-                {isSignUp 
-                  ? 'Create your account to start journaling'
-                  : 'Sign in to your account'
-                }
-              </p>
-            </div>
+          <form className="space-y-4" onSubmit={isSignUp ? handleSignUp : handleLogin}>
+            {isSignUp && (
+              <>
+                <div className="grid grid-cols-2 gap-4">
+                  <input
+                    className="w-full px-4 py-3 bg-blue-200 border border-blue-200 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    type="text"
+                    placeholder="First Name"
+                    value={firstName}
+                    required={true}
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
+                  <input
+                    className="w-full px-4 py-3 bg-blue-200 border border-blue-200 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    type="text"
+                    placeholder="Last Name"
+                    value={lastName}
+                    required={true}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </div>
+                <input
+                  className="w-full px-4 py-3 bg-blue-200 border border-blue-200 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  type="tel"
+                  placeholder="Phone Number"
+                  value={phoneNumber}
+                  required={true}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                />
+              </>
+            )}
             
-            <form className="space-y-6" onSubmit={isSignUp ? handleSignUp : handleLogin}>
-              <div className="space-y-4">
-                {isSignUp && (
-                  <>
-                    <input
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      type="text"
-                      placeholder="First Name"
-                      value={firstName}
-                      required={true}
-                      onChange={(e) => setFirstName(e.target.value)}
-                    />
-                    <input
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      type="text"
-                      placeholder="Last Name"
-                      value={lastName}
-                      required={true}
-                      onChange={(e) => setLastName(e.target.value)}
-                    />
-                    <input
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      type="tel"
-                      placeholder="Phone Number"
-                      value={phoneNumber}
-                      required={true}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                    />
-                  </>
-                )}
-                
-                <input
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  type="email"
-                  placeholder="Your email"
-                  value={email}
-                  required={true}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                
-                <input
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  type="password"
-                  placeholder="Your password"
-                  value={password}
-                  required={true}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              
+            <input
+              className="w-full px-4 py-3 bg-blue-200 border border-blue-200 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              type="email"
+              placeholder="Email address"
+              value={email}
+              required={true}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            
+            <input
+              className="w-full px-4 py-3 bg-blue-200 border border-blue-200 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              type="password"
+              placeholder={isSignUp ? "Password" : "Password (optional)"}
+              value={password}
+              required={isSignUp}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            {/* Magic Link Button - Only shows on login page */}
+            {!isSignUp ? (
+              // Login button
               <button 
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                type="submit"
+                className="w-full px-8 py-3 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={loading || !email}
+              >
+                {loading ? 'Signing In...' : 'Sign In'}
+              </button>
+            ) : (
+              // Signup button
+              <button 
+                type="submit"
+                className="w-full px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={loading}
               >
-                {loading ? (
-                  <span>Loading...</span>
-                ) : (
-                  <span>{isSignUp ? 'Create Account' : 'Sign In'}</span>
-                )}
+                {loading ? 'Creating Account...' : 'Create Account'}
               </button>
-              
-              <div className="text-center">
-                <p className="text-gray-600">
-                  {isSignUp ? 'Already have an account?' : "Don't have an account?"}
-                  <button 
-                    type="button" 
-                    className="ml-2 text-blue-600 hover:text-blue-500 font-medium focus:outline-none focus:underline disabled:opacity-50 disabled:cursor-not-allowed"
-                    onClick={toggleMode}
-                    disabled={loading}
-                  >
-                    {isSignUp ? 'Sign In' : 'Sign Up'}
-                  </button>
-                </p>
-              </div>
-            </form>
+            )}
+          </form>
+
+          {/* Toggle Mode Button - Shows different text based on current mode */}
+          <div className="text-center">
+            <button 
+              type="button" 
+              className="w-full px-4 py-3 border border-white rounded-lg text-gray-600 hover:text-gray-800  transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={toggleMode}
+              disabled={loading}
+            >
+              {isSignUp ? "Already have an account? Log in→" : "Don't have an account? Sign up→"}
+            </button>
           </div>
         </div>
       </div>
