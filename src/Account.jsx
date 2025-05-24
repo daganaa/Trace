@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
 
-export default function Account({ session }) {
+export default function Account({ session, onGoToEmptyPage }) {
   const [loading, setLoading] = useState(true)
   const [firstName, setFirstName] = useState(null)
   const [lastName, setLastName] = useState(null)
@@ -263,6 +263,25 @@ export default function Account({ session }) {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      </div>
+      
+      {/* Add this button section at the bottom, before the closing divs */}
+      <div className="max-w-4xl mx-auto mt-8">
+        <div className="bg-white shadow rounded-lg p-6">
+          <div className="text-center">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Ready to Start Journaling?</h3>
+            <p className="text-gray-600 mb-6">Access your journaling workspace and begin your reflection journey.</p>
+            <button
+              onClick={onGoToEmptyPage}
+              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            >
+              Go to Journal
+              <svg className="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>

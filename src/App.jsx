@@ -9,6 +9,7 @@ import LandingPage from './LandingPage'
 function App() {
   const [session, setSession] = useState(null)
   const [showLanding, setShowLanding] = useState(true)
+  const [showEmptyPage, setShowEmptyPage] = useState(false)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -34,6 +35,15 @@ function App() {
 
   const handleBackToLanding = () => {
     setShowLanding(true)
+    setShowEmptyPage(false)
+  }
+
+  const handleGoToEmptyPage = () => {
+    setShowEmptyPage(true)
+  }
+
+  const handleBackToAccount = () => {
+    setShowEmptyPage(false)
   }
 
   // Show landing page first
@@ -41,10 +51,15 @@ function App() {
     return <LandingPage onGetStarted={handleGetStarted} />
   }
 
+  // Show empty page if requested
+  if (showEmptyPage && session) {
+    return <EmptyPage onBackToAccount={handleBackToAccount} />
+  }
+
   // Then show auth or account based on session
   return (
     <div>
-      {!session ? <Auth onBackToLanding={handleBackToLanding} /> : <Account session={session} />}
+      {!session ? <Auth onBackToLanding={handleBackToLanding} /> : <Account session={session} onGoToEmptyPage={handleGoToEmptyPage} />}
     </div>
   )
 }

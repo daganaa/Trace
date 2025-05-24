@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { supabase } from './supabaseClient'
 
-export default function CallTimeInput() {
+export default function CallTimeInput({ onBackToAccount }) {
   const [hours, setHours] = useState(12)
   const [minutes, setMinutes] = useState(0)
   const [ampm, setAmpm] = useState('AM')
@@ -9,7 +9,11 @@ export default function CallTimeInput() {
   const [submitMessage, setSubmitMessage] = useState('')
 
   const handleGoBack = () => {
-    window.history.back()
+    if (onBackToAccount) {
+      onBackToAccount()
+    } else {
+      window.history.back()
+    }
   }
 
   const convertToTimestamp = () => {
