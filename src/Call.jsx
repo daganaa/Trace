@@ -32,8 +32,9 @@ export default function Call({ callData, onBackToJournal }) {
 
       <div className="bg-white shadow rounded-lg p-6">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Call Details</h1>
-          <p className="text-gray-600">Call ID: {callData?.call_id}</p>
+          <h1 className="text-6xl lg:text-8xl font-bold font-serif text-gray-900 mb-8">
+            Call Details
+          </h1>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -50,6 +51,7 @@ export default function Call({ callData, onBackToJournal }) {
                   return startTime.replace(/(:\d{2})(\s*[AP]M)?$/i, '$2');
                 })()}</p>
                 <p><strong>Duration:</strong> {callData?.formatted_duration || 'N/A'}</p>
+                <p><strong>Sentiment: </strong>Frustrated</p>
               </div>
             </div>
           </div>
@@ -70,6 +72,8 @@ export default function Call({ callData, onBackToJournal }) {
           <div>
             <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-4">Full Transcript</h3>
             <div className="bg-gray-50 rounded-lg p-6 max-h-96 overflow-y-auto">
+              Today I stubbed my toe and it lowkey <span className="text-red-500">ruined</span> my day. I was just walking to the kitchen and ran into the corner of the kitchen island and I dropped my hot pocket on my toe and it just added salt to the <span className="text-red-500">wound</span>. I'd rate today a <span className="text-red-500">4/10</span> just because I dropped my hot pocket. I also got a sandwich from Ike's today, though, and that kind of <span className="text-red-500">saved the day</span>.            {/*
+            <div className="bg-gray-50 rounded-lg p-6 max-h-96 overflow-y-auto">
               {callData?.transcript ? (
                 <div className="whitespace-pre-wrap text-gray-900 leading-relaxed">
                   {callData.transcript}
@@ -77,6 +81,8 @@ export default function Call({ callData, onBackToJournal }) {
               ) : (
                 <p className="text-gray-500 italic">No transcript available</p>
               )}
+            </div>
+            */}
             </div>
           </div>
         </div>

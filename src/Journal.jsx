@@ -34,15 +34,16 @@ export default function Journal({ onBackToAccount, onViewCall }) {
         </button>
       </div>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-6">Call Journal</h2>
-        <h3 className="text-lg font-semibold mb-4">Call History</h3>
+        <h1 className="text-6xl lg:text-8xl font-bold font-serif text-gray-900 mb-8">
+          <h2 className="text-2xl font-bold mb-6">Libro Journal</h2>
+        </h1>
+        <h3 className="text-lg font-semibold mb-4">Call History & Information</h3>
         {callsLoading ? (
           <p>Loading calls...</p>
         ) : calls.length > 0 ? (
           <div className="space-y-4">
             {calls.map((call) => (
-              <div key={call.call_id} className="border p-4 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="flex items-center justify-between">
+              <div key={call.call_id} className="border-gray-100 border p-4 rounded-lg hover:bg-gray-100 transition-colors">                <div className="flex items-center justify-between">
                   <div>
                     <p className="text-lg font-medium">{(() => {
                       const startTime = call.formatted_start_time;
@@ -56,7 +57,7 @@ export default function Journal({ onBackToAccount, onViewCall }) {
                   <div>
                     <button
                       onClick={() => onViewCall(call)}
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-200 hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
                       View Details
                       <svg className="ml-2 -mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
