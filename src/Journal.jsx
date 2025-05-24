@@ -44,7 +44,14 @@ export default function Journal({ onBackToAccount, onViewCall }) {
               <div key={call.call_id} className="border p-4 rounded-lg hover:bg-gray-50 transition-colors">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-lg font-medium">{call.formatted_start_time || 'N/A'}</p>
+                    <p className="text-lg font-medium">{(() => {
+                      const startTime = call.formatted_start_time;
+                      if (!startTime || startTime === 'N/A') return 'N/A';
+                      
+                      // Remove seconds from the time string
+                      // This handles formats like "12:34:56 PM" -> "12:34 PM" or "2024-01-01 12:34:56" -> "2024-01-01 12:34"
+                      return startTime.replace(/(:\d{2})(\s*[AP]M)?$/i, '$2');
+                    })()}</p>
                   </div>
                   <div>
                     <button

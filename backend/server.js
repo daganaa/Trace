@@ -58,6 +58,21 @@ const convertEpochToDateTime = (epochMs, options = {}) => {
   }
 };
 
+// Helper function to convert milliseconds to readable format
+function formatDuration(durationMs) {
+  if (!durationMs || durationMs <= 0) return 'N/A';
+  
+  const totalSeconds = Math.floor(durationMs / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  
+  if (minutes > 0) {
+    return `${minutes}m ${seconds}s`;
+  } else {
+    return `${seconds}s`;
+  }
+}
+
 // Middleware
 app.use(cors({
   origin: ['http://localhost:5173', 'http://localhost:3000'], // Add your frontend URLs
@@ -157,7 +172,8 @@ app.get('/api/calls', async (req, res) => {
         start_timestamp: call.start_timestamp,
         transcript: call.transcript || null,
         call_summary: call.call_analysis?.call_summary || null,
-        call_successful: call.call_analysis?.call_successful || null
+        call_successful: call.call_analysis?.call_successful || null,
+        duration_ms: call.duration_ms || null
       };
       
       // Convert start_timestamp to readable format if it exists
@@ -166,6 +182,11 @@ app.get('/api/calls', async (req, res) => {
           format: 'locale',
           timezone: 'America/New_York' // Adjust timezone as needed
         });
+      }
+      
+      // Format duration if it exists
+      if (filteredCall.duration_ms) {
+        filteredCall.formatted_duration = formatDuration(filteredCall.duration_ms);
       }
       
       return filteredCall;

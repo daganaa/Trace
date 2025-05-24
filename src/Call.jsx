@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React from 'react'
 
 export default function Call({ callData, onBackToJournal }) {
   if (!callData) {
@@ -41,13 +41,15 @@ export default function Call({ callData, onBackToJournal }) {
             <div>
               <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Call Information</h3>
               <div className="mt-2 space-y-2">
-                <p><strong>Start Time:</strong> {callData?.formatted_start_time || callData?.start_timestamp || 'N/A'}</p>
-                <p><strong>End Time:</strong> {callData?.formatted_end_time || callData?.end_timestamp || 'N/A'}</p>
-                <p><strong>Duration:</strong> {callData?.call_length ? `${callData.call_length} seconds` : 'N/A'}</p>
-                <p><strong>Status:</strong> {callData?.call_status || 'N/A'}</p>
-                <p><strong>Successful:</strong> {callData?.call_successful ? 'Yes' : 'No'}</p>
-                <p><strong>From:</strong> {callData?.from_number || 'N/A'}</p>
-                <p><strong>To:</strong> {callData?.to_number || 'N/A'}</p>
+                <p><strong>Start Time:</strong> {(() => {
+                  const startTime = callData?.formatted_start_time || callData?.start_timestamp;
+                  if (!startTime || startTime === 'N/A') return 'N/A';
+                  
+                  // Remove seconds from the time string
+                  // This handles formats like "12:34:56 PM" -> "12:34 PM" or "2024-01-01 12:34:56" -> "2024-01-01 12:34"
+                  return startTime.replace(/(:\d{2})(\s*[AP]M)?$/i, '$2');
+                })()}</p>
+                <p><strong>Duration:</strong> {callData?.formatted_duration || 'N/A'}</p>
               </div>
             </div>
           </div>
