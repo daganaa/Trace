@@ -12,32 +12,28 @@ export default function CallTimeInput() {
     window.history.back()
   }
 
-  const convertToTimestamp = (hours, minutes, ampm) => {
-    // Get tomorrow's date instead of today
+  const convertToTimestamp = () => {
+    // Get tomorrow's date in local timezone
     const tomorrow = new Date()
-    tomorrow.setDate(tomorrow.getDate() + 1) // Add 1 day
+    tomorrow.setDate(tomorrow.getDate() + 1)
     
+    // Convert 12-hour to 24-hour format for proper time setting
     let hour24 = hours
-    
-    // Convert 12-hour to 24-hour format
     if (ampm === 'PM' && hours !== 12) {
       hour24 = hours + 12
     } else if (ampm === 'AM' && hours === 12) {
       hour24 = 0
     }
     
-    // Create the scheduled date with proper time
-    const scheduledDate = new Date(
-      tomorrow.getFullYear(), 
-      tomorrow.getMonth(), 
-      tomorrow.getDate(), 
-      hour24, 
-      minutes,
-      0, // seconds
-      0  // milliseconds
-    )
+    // Create a new date object for tomorrow with the selected time
+    const scheduledDate = new Date(tomorrow)
+    scheduledDate.setHours(hour24, minutes, 0, 0)
     
-    return scheduledDate.toISOString()
+    // Get timezone offset and adjust to prevent UTC conversion
+    const timezoneOffset = scheduledDate.getTimezoneOffset() * 60000
+    const localTime = new Date(scheduledDate.getTime() - timezoneOffset)
+    
+    return localTime.toISOString()
   }
 
   const handleSubmit = async (e) => {
